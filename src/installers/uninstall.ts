@@ -1,0 +1,2 @@
+import path from "node:path";import fs from "fs-extra";import { getAgentDir } from "../agents/agent-registry.js";import { readLockfile, writeLockfile } from "../lock/lockfile.js";
+export async function uninstallSkill(name:string,agent:string){ const target=path.join(getAgentDir(agent),name); await fs.remove(target); const lock=await readLockfile(); lock.installed=lock.installed.filter(i=>!(i.name===name && i.installed_to.some(t=>t.agent===agent))); await writeLockfile(lock); }
