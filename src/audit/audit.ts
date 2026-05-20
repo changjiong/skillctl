@@ -1,0 +1,2 @@
+import fs from "fs-extra";import path from "node:path";import { RULES } from "./rules.js";
+export async function auditSkill(dir:string){ const findings:string[]=[]; const files=await fs.readdir(dir); for(const f of files){ const full=path.join(dir,f); if((await fs.stat(full)).isFile() && /\.(sh|ps1|md|json)$/i.test(f)){ const c=await fs.readFile(full,"utf8"); for(const r of RULES) if(r.test(c)) findings.push(`${f}: ${r.source}`); }} return findings; }
